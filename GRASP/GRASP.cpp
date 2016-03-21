@@ -32,6 +32,7 @@ void GRASP::LDO(Graph *G, int avoidColor){
     int node = it->second;
     if((*G).nodeColor[node] == -1){
       chooseColor(G, node, avoidColor);
+      (*G).attNeighborhood(node);
     }
   }
 }
@@ -44,6 +45,7 @@ void GRASP::SDO(Graph *G, int avoidColor){
     int node = it->second;
     if((*G).nodeColor[node] == -1){
       chooseColor(G, node, avoidColor);
+      (*G).attNeighborhood(node);
     }
   }
 }
