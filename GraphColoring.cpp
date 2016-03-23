@@ -1,3 +1,4 @@
+/*
 #include <iostream>
 #include <list>
 #include <vector>
@@ -36,7 +37,7 @@ private:
 
 	/*
 	vector<int> neighbourhood3(vector<int> originalVertex, list<int> *adj, vector<int> colorSize);
-	*/
+	/
 };
 
 void Graph::addEdge(int v, int w){
@@ -65,7 +66,7 @@ void Graph::greedyColoring()
     		A temporary array to store the available colors. True
     	value of available[cr] would mean that the color cr is
     	avaiable to coloring this vertice.
-    */
+    /
     vector<bool> available(V, true);
 
     // Assign colors to remaining V-1 vertices
@@ -174,7 +175,7 @@ int Graph::selectNodeColorGrasp(vector<bool> available, vector<int> colorSize, i
 						Se a cor não for nova cria uma roleta para ela, se for nova
 					criamos uma roleta para ela com o tamanho de 1 quinto do tamanho
 					atual da roleta +1, caso a roleta seja menor que 5.
-				*/
+				/
 	    		build.color = i;
 	    		if(colorSize[i] > 0){
 	    			build.size = colorSize[i];
@@ -335,3 +336,4 @@ int main(){
 
     return 0;
 }
+*/

@@ -9,7 +9,7 @@ void ILS::doILS(Graph *G, bool useRecoloring, bool useForceColor, bool useSwitch
   for(int i = 0; i < 100; i++){
     recoloring(G);
     forceColor(G);
-    //changeColor(G);
+    changeColor(G);
     if((*G).numColors < best){
       best = (*G).numColors;
       i = 0;
@@ -93,7 +93,7 @@ void ILS::resolveConflicts(Graph *G, int node, int color){
     if ((*G).nodeColor[*i] == color){
         (*G).unpaintNode(*i);
         grasp.doGrasp(G, -1, color);
-        resolveConflicts(G, *i, color);
+        //resolveConflicts(G, *i, color);
     }
   }
 }
