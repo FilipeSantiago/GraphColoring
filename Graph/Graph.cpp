@@ -84,7 +84,7 @@ void Graph::attNeighborhood(int node){
 int Graph::getNumberOfColoredNgb(int node){
   int response = 0;
   for(int i = 0; i < adj[node].size(); i++){
-    if(nodeColor[node] != -1 && nodeColor[node] != 0) response++;
+    if(nodeColor[i] != -1 && nodeColor[i] != 0) response++;
   }
   return response;
 }
@@ -92,10 +92,30 @@ int Graph::getNumberOfColoredNgb(int node){
 int Graph::getNumberOfDiferentColoredNgb(int node){
   set<int> colors;
   for(int i = 0; i < adj[node].size(); i++){
-    if(nodeColor[node] != -1 && nodeColor[node] != 0) colors.insert(nodeColor[node]);
+    if(nodeColor[i] != -1 && nodeColor[i] != 0) colors.insert(nodeColor[i]);
   }
   return colors.size();
 }
+
+int Graph::GetColorOfNgbWithLessConflicts(int node){
+  // cout << "entra aqui" << endl;
+   int lessConflict = INT_MAX;
+   int resp = -1;
+   for(int i = 0; i < adj[node].size(); i++){
+     set<int> colors;
+     if(adj[i].size() <= 0) cout << "EWWWWWWWWWWWWWWWWW" << endl;
+     for(int j = 0; j < adj[i].size(); j++){
+       if(nodeColor[j] != -1 && nodeColor[j] != 0) colors.insert(nodeColor[j]);
+     }
+     if(lessConflict > colors.size()){
+       lessConflict = colors.size();
+       resp = nodeColor[i];
+     }
+  }
+//  cout << "sai aqui " << resp << endl;
+  return resp;
+}
+
 
 /*----------------------------Imprimir as paradas--------------------------------*/
 void Graph::printGraphNodesColors(){

@@ -8,6 +8,7 @@
 #include <list>
 #include <vector>
 #include <string>
+#include <algorithm>
 #include "boost/random.hpp"
 #include "boost/generator_iterator.hpp"
 
@@ -23,7 +24,9 @@ private:
     void forceColor (Graph *G);
     void initialize (Graph *G);
     void changeColor(Graph *G);
-    void resolveConflicts(Graph *G,int node, int color);
+    void resolveConflicts(Graph *G,int node, int color, int deep);
+    int  getPossibleColor(Graph* G, int node, int avoidColor);
+
 };
 
 #endif

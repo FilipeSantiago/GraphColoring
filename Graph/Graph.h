@@ -6,6 +6,7 @@
 #include <map>
 #include <set>
 #include <string>
+#include <climits>
 
 using namespace std;
 
@@ -22,17 +23,6 @@ public:
     list<int> *adj;
     // Constructor and destructor
 
-    Graph(int V)   {
-      this->numColors = 0;
-      this->V = V;
-      adj = new list<int>[V];
-      nodeColor = vector<int>(V, -1);
-      sizeColor = vector<int>(V, -1);
-    }
-
-    ~Graph()       { delete [] adj; }
-
-
     Graph(Graph &Copy)   {
       this->V = Copy.V;
       this->adj = new list<int>[V];
@@ -46,6 +36,26 @@ public:
       this->nodes = Copy.nodes;
     }
 
+    Graph(int V)   {
+      this->numColors = 0;
+      this->V = V;
+      adj = new list<int>[V];
+      nodeColor = vector<int>(V, -1);
+      sizeColor = vector<int>(V, -1);
+    }
+
+    ~Graph(){
+      delete [] adj;
+      nodeColor.shrink_to_fit();
+      sizeColor.shrink_to_fit();
+      nodes.clear();
+      coloredNodes.clear();
+      differentColoredNodes.clear();
+    }
+
+
+
+
     //Basicão
     void CopyGraph(Graph info);
     void unpaintNode(int node);
@@ -57,6 +67,7 @@ public:
     void attNeighborhood(int node);
     int getNumberOfColoredNgb(int node);
     int getNumberOfDiferentColoredNgb(int node);
+    int GetColorOfNgbWithLessConflicts(int node);
 
     //test functions
     void printNodeDegree();

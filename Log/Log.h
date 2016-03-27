@@ -2,23 +2,22 @@
 #define Log_H
 
 #include "../Graph/Graph.h"
+#include "Info.h"
+#include <fstream>
+#include <iomanip>
+#include <sstream>
 
 using namespace std;
 
 class Log{
 
-  int executions;
-  int sumTimeOfExecutions;
-
-  int bestResult;
-  int AverageResult;
 public:
+  vector<Info> logInfo;
     // Constructor and destructor
     Log()   {  }
     ~Log()  {  }
 
-    void getNewDate(int timeOfExecution, int result);
-    void logToFile (string graphName);
+    void logToFile (string fileName);
 };
 
 #endif

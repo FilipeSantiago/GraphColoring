@@ -15,23 +15,34 @@ struct coloring{
 
 class GRASP{
 
+	multimap<int,int>degreeOrder;
+	Graph *G;
 public:
     // Constructor and destructor
-    GRASP()   {  }
-    ~GRASP()       { }
+    GRASP(Graph *Graph){
+			this->G = Graph;
+			degreeOrder = degreeAskey((*G).nodes);
+		}
+    ~GRASP()
+		{
+			degreeOrder.clear();
+		}
 
-    void doGrasp(Graph *G, int type, int avoidColor);
+    void doGrasp(int type, int avoidColor);
+		void chooseColor(int node, int avoidColor);
+		int pickARandomNumberBetween(int, int);
+		int selectNodeColorGrasp(vector<bool> available, vector<int> colorSize, int ignore, int V);
 
 private:
-		void FirstFit(Graph *G, int avoidColor);
-		void LDO(Graph *G, int avoidColor);
-		void SDO(Graph *G, int avoidColor);
-		void IDO(Graph *G, int avoidColor);
+		void FirstFit(int avoidColor);
+		void LDO(int avoidColor);
+		void SDO(int avoidColor);
+		void IDO(int avoidColor);
 
-		int selectNodeColorGrasp(vector<bool> available, vector<int> colorSize, int ignore, int V);
+		multimap<int, int> attDifferentColoredNeighborhood(map<int, int> differentColoredNodes, int node);
+		multimap<int, int> attColoredNeighborhood(map<int, int> differentColoredNodes, int node);
+
     int getColorSize(int, int, int);
-    int pickARandomNumberBetween(int, int);
-		void chooseColor(Graph *G, int node, int avoidColor);
 		multimap<int, int> degreeAskey(map<int, int> nodes);
 };
 

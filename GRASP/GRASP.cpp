@@ -1,66 +1,101 @@
 #include "GRASP.h"
 
 //Grafo, tipo de GRASP, se o grafo está "incolor"
-void GRASP::doGrasp(Graph *G, int type, int avoidColor){
+void GRASP::doGrasp(int type, int avoidColor){
   switch (type) {
     case 1:
-      LDO(G, avoidColor);
+      LDO(avoidColor);
       break;
     case 2:
-    SDO(G, avoidColor);
+      SDO(avoidColor);
       break;
     case 3:
-    IDO(G, avoidColor);
+      IDO(avoidColor);
       break;
     default:
-      FirstFit(G, avoidColor);
+      FirstFit(avoidColor);
   }
 }
 
-void GRASP::FirstFit(Graph *G, int avoidColor){
+void GRASP::FirstFit(int avoidColor){
   for (int node = 0; node < (*G).V; node++){
     if((*G).nodeColor[node] == -1){
-      chooseColor(G, node, avoidColor);
+      chooseColor(node, avoidColor);
     }
   }
 }
 
-void GRASP::LDO(Graph *G, int avoidColor){
-  multimap<int,int>degreeOrder = degreeAskey((*G).nodes);
+void GRASP::LDO(int avoidColor){
   multimap<int, int>::iterator it;
   for (it = prev(degreeOrder.end()); it != prev(degreeOrder.begin()); --it){
     int node = it->second;
     if((*G).nodeColor[node] == -1){
-      chooseColor(G, node, avoidColor);
-      (*G).attNeighborhood(node);
+      chooseColor(node, avoidColor);
     }
   }
 }
 
-void GRASP::SDO(Graph *G, int avoidColor){
+void GRASP::SDO(int avoidColor){
   (*G).getColorsNeighborhood();
-  multimap<int,int>degreeOrder = degreeAskey((*G).differentColoredNodes);
+  map<int,int> coloredNodes = (*G).differentColoredNodes;
+  multimap<int,int>degreeOrder = degreeAskey(coloredNodes);
   multimap<int, int>::iterator it;
-  for (it = prev(degreeOrder.end()); it != prev(degreeOrder.begin()); --it){
+  while (degreeOrder.size() > 0){
+    it = prev(degreeOrder.end());
     int node = it->second;
     if((*G).nodeColor[node] == -1){
-      chooseColor(G, node, avoidColor);
-      (*G).attNeighborhood(node);
+      chooseColor(node, avoidColor);
+      coloredNodes.erase(coloredNodes.find(node));
+      degreeOrder = attDifferentColoredNeighborhood(coloredNodes,node);
+    }else{
+      coloredNodes.erase(coloredNodes.find(node));
     }
   }
 }
 
-void GRASP::IDO(Graph *G, int avoidColor){
+multimap<int, int> GRASP::attDifferentColoredNeighborhood(map<int, int> differentColoredNodes, int node){
+  int colored;
+  int differentColors;
+  list<int>::iterator i;
+  map<int,int>::iterator it;
+  for (i = (*G).adj[node].begin(); i != (*G).adj[node].end(); ++i){
+    differentColors = (*G).getNumberOfDiferentColoredNgb(*i);
+    it = differentColoredNodes.find(node);
+    if (it != differentColoredNodes.end()) differentColoredNodes[node] = differentColors;
+  }
+  return degreeAskey(differentColoredNodes);
+}
+
+void GRASP::IDO(int avoidColor){
   (*G).getColorsNeighborhood();
-  multimap<int,int>degreeOrder = degreeAskey((*G).coloredNodes);
-  multimap<int, int>::iterator it;
-  for (it = prev(degreeOrder.end()); it != prev(degreeOrder.begin()); --it){
+  map<int,int> coloredNodes = (*G).differentColoredNodes;
+  multimap<int,int>degreeOrder = degreeAskey(coloredNodes);
+  map<int, int>::iterator it;
+  while (degreeOrder.size() > 0){
+    it = prev(degreeOrder.end());
     int node = it->second;
     if((*G).nodeColor[node] == -1){
-      chooseColor(G, node, avoidColor);
+      chooseColor(node, avoidColor);
+      coloredNodes.erase(coloredNodes.find(node));
+      degreeOrder = attColoredNeighborhood(coloredNodes,node);
+    }else{
+      coloredNodes.erase(coloredNodes.find(node));
     }
   }
 }
+
+multimap<int, int> GRASP::attColoredNeighborhood(map<int, int> coloredNodes, int node){
+  int colored;
+  list<int>::iterator i;
+  map<int,int>::iterator it;
+  for (i = (*G).adj[node].begin(); i != (*G).adj[node].end(); ++i){
+    colored = (*G).getNumberOfColoredNgb(*i);
+    it = coloredNodes.find(node);
+    if (it != coloredNodes.end()) coloredNodes[node] = colored;
+  }
+  return degreeAskey(coloredNodes);
+}
+
 
 int GRASP::selectNodeColorGrasp(vector<bool> available, vector<int> colorSize,
                                 int ignore, int GraphSize){
@@ -79,8 +114,8 @@ int GRASP::selectNodeColorGrasp(vector<bool> available, vector<int> colorSize,
           possibleColors.push_back(build);
           j++;
           if(colorSize[i] <= 0) break;
-	        }else if(j >= 3) break;
- 	     }
+        }else if(j >= 3) break;
+      }
     }
     int pos = GRASP::pickARandomNumberBetween(0, possibleColors[possibleColors.size() - 1].size);
   	for (int i = 0; i <= j; ++i)
@@ -119,7 +154,7 @@ multimap<int, int> GRASP::degreeAskey(map<int, int> nodes){
   return response;
 }
 
-void GRASP::chooseColor(Graph *G, int node, int avoidColor){
+void GRASP::chooseColor(int node, int avoidColor){
   vector<bool> available((*G).V, true);
   list<int>::iterator i;
   for (i = (*G).adj[node].begin(); i != (*G).adj[node].end(); ++i){
