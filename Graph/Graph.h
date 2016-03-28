@@ -58,6 +58,7 @@ public:
 
     //Basicão
     void CopyGraph(Graph info);
+    void CopyInfoGraph(Graph info);
     void unpaintNode(int node);
     void paintNode(int node, int color);
     void addEdge(int v, int w);

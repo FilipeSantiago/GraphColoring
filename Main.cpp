@@ -19,7 +19,7 @@ int main(){
   Log logGenerator;
 
   DIR *dir;
-  string file = "DSJC250.9.col";
+  string file = "DSJC250.1.col";
   struct dirent *ent;
   vector<string> files;
   ILS ils;
@@ -31,7 +31,7 @@ int main(){
     Graph *g1 = new Graph(base);
     GRASP *grasp = new GRASP(g1);
     auto start = std::chrono::high_resolution_clock::now();
-    //grasp->doGrasp(3, -1);
+    //grasp->doGrasp(1, -1);
     ils.doILS(g1, true, true, true);
     auto elapsed = std::chrono::high_resolution_clock::now() - start;
 
@@ -41,7 +41,7 @@ int main(){
     delete g1;
     delete grasp;
   }
-  logGenerator.logToFile(file+"result.txt");
+  logGenerator.logToFile(file+"result4.txt");
 
   /*
 

@@ -16,6 +16,13 @@ void Graph::CopyGraph(Graph info){
   this->nodes = info.nodes;
 }
 
+void Graph::CopyInfoGraph(Graph info){
+  this->nodeColor = info.nodeColor;
+  this->sizeColor = info.sizeColor;
+  this->numColors = info.numColors;
+  this->nodes = info.nodes;
+}
+
 void Graph::addEdge(int v, int w){
     adj[v].push_back(w);
     adj[w].push_back(v);
@@ -56,9 +63,8 @@ void Graph::paintNode(int node, int color){
 /*----------------------------Pra fazer vizinhança colorida--------------------------------*/
 void Graph::getColorsNeighborhood(){
   for(int i = 0; i < V; i++){
-    coloredNodes.insert(pair<int,int>(i, 0));           //Inicializa com 0, caso não tenha vizinhos coloridos
-    differentColoredNodes.insert(pair<int,int>(i, 0));
-    attNeighborhood(i);
+    coloredNodes.insert(pair<int,int>(i, getNumberOfColoredNgb(i)));           //Inicializa com 0, caso não tenha vizinhos coloridos
+    differentColoredNodes.insert(pair<int,int>(i, getNumberOfDiferentColoredNgb(i)));
   }
 }
 
@@ -84,7 +90,7 @@ void Graph::attNeighborhood(int node){
 int Graph::getNumberOfColoredNgb(int node){
   int response = 0;
   for(int i = 0; i < adj[node].size(); i++){
-    if(nodeColor[i] != -1 && nodeColor[i] != 0) response++;
+    if(nodeColor[i] != -1) response++;
   }
   return response;
 }
@@ -92,7 +98,7 @@ int Graph::getNumberOfColoredNgb(int node){
 int Graph::getNumberOfDiferentColoredNgb(int node){
   set<int> colors;
   for(int i = 0; i < adj[node].size(); i++){
-    if(nodeColor[i] != -1 && nodeColor[i] != 0) colors.insert(nodeColor[i]);
+    if(nodeColor[i] != -1) colors.insert(nodeColor[i]);
   }
   return colors.size();
 }

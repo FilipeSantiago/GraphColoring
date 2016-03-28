@@ -60,8 +60,8 @@ multimap<int, int> GRASP::attDifferentColoredNeighborhood(map<int, int> differen
   map<int,int>::iterator it;
   for (i = (*G).adj[node].begin(); i != (*G).adj[node].end(); ++i){
     differentColors = (*G).getNumberOfDiferentColoredNgb(*i);
-    it = differentColoredNodes.find(node);
-    if (it != differentColoredNodes.end()) differentColoredNodes[node] = differentColors;
+    it = differentColoredNodes.find(*i);
+    if (it != differentColoredNodes.end()) differentColoredNodes[*i] = differentColors;
   }
   return degreeAskey(differentColoredNodes);
 }
@@ -90,8 +90,8 @@ multimap<int, int> GRASP::attColoredNeighborhood(map<int, int> coloredNodes, int
   map<int,int>::iterator it;
   for (i = (*G).adj[node].begin(); i != (*G).adj[node].end(); ++i){
     colored = (*G).getNumberOfColoredNgb(*i);
-    it = coloredNodes.find(node);
-    if (it != coloredNodes.end()) coloredNodes[node] = colored;
+    it = coloredNodes.find(*i);
+    if (it != coloredNodes.end()) coloredNodes[*i] = colored;
   }
   return degreeAskey(coloredNodes);
 }
@@ -148,6 +148,7 @@ int GRASP::pickARandomNumberBetween(int begin, int end){
 multimap<int, int> GRASP::degreeAskey(map<int, int> nodes){
   multimap<int, int> response;
   map<int, int>::iterator it;
+  int i = 0;
   for (it = nodes.begin(); it != nodes.end(); ++it){
     response.insert(pair<int, int>(it->second, it->first));
   }

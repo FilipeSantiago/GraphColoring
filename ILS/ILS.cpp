@@ -7,8 +7,10 @@ void ILS::doILS(Graph *G, bool useRecoloring, bool useForceColor, bool useSwitch
 
   //Para se rodar 10x sem melhorar
   for(int i = 0; i < 20; i++){
-    /*recoloring(G);
-    forceColor(G);*/
+    cout << i << endl;
+
+    recoloring(G);
+    forceColor(G);
     changeColor(G);
     if((*G).numColors < best){
       best = (*G).numColors;
@@ -41,8 +43,8 @@ void ILS::forceColor(Graph *G){
       }
     }
     if(auxG.numColors < best.numColors){
-      best.CopyGraph(auxG);
       forceColor(&auxG);
+      best.CopyGraph(auxG);
     }
   }
   (*G).CopyGraph(best);
@@ -64,8 +66,8 @@ void ILS::recoloring(Graph *G){
     grasp.doGrasp(1, i);
 
     if(auxG.numColors < best.numColors){
-      best.CopyGraph(auxG);
       recoloring(&auxG);
+      best.CopyGraph(auxG);
     }
   }
   (*G).CopyGraph(best);
@@ -95,8 +97,8 @@ void ILS::changeColor(Graph *G){
 
       }
       if(auxG.numColors < best.numColors){
+        changeColor(&auxG);
         best.CopyGraph(auxG);
-        changeColor(&best);
       }
     }
   }
