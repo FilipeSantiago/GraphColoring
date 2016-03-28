@@ -20,7 +20,6 @@ void Graph::CopyInfoGraph(Graph info){
   this->nodeColor = info.nodeColor;
   this->sizeColor = info.sizeColor;
   this->numColors = info.numColors;
-  this->nodes = info.nodes;
 }
 
 void Graph::addEdge(int v, int w){

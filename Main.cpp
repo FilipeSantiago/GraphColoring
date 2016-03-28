@@ -19,7 +19,7 @@ int main(){
   Log logGenerator;
 
   DIR *dir;
-  string file = "DSJC250.1.col";
+  string file = "DSJC125.1.col";
   struct dirent *ent;
   vector<string> files;
   ILS ils;
@@ -41,7 +41,7 @@ int main(){
     delete g1;
     delete grasp;
   }
-  logGenerator.logToFile(file+"result4.txt");
+  logGenerator.logToFile(file+"result.txt");
 
   /*
 

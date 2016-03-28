@@ -4,24 +4,45 @@
 void ILS::doILS(Graph *G, bool useRecoloring, bool useForceColor, bool useSwitchColors){
   initialize(G);
   int best = (*G).numColors;
-
+  Graph bestG(*G);
   //Para se rodar 10x sem melhorar
   for(int i = 0; i < 20; i++){
-    cout << i << endl;
-
+    //cout << i << endl;
     recoloring(G);
     forceColor(G);
     changeColor(G);
     if((*G).numColors < best){
       best = (*G).numColors;
+      bestG.CopyGraph(*G);
+      cout << "MELHOROU " << i << " -> novo best = " << best << endl;
       i = 0;
     }
+    if(G->numColors < (best+2)){
+      shake1(G);
+    }else{
+      G->CopyGraph(bestG);
+      shake1(G);
+    }
   }
+  G->CopyGraph(bestG);
+
+}
+
+void ILS::shake1(Graph* G){
+  GRASP grasp(G);
+  int start = grasp.pickARandomNumberBetween(0, G->V/2);
+  int end   = grasp.pickARandomNumberBetween(G->V/4, G->V/3) + start;
+
+  for(int i = start; i < end; i++){
+    G->unpaintNode(i);
+  }
+  grasp.doGrasp(1, -1);
 }
 
 void ILS::initialize(Graph *G){
   GRASP grasp(G);
   grasp.doGrasp(1, -1);
+  cout << "entrou com " << G->numColors << endl;
 }
 
 void ILS::forceColor(Graph *G){
@@ -29,6 +50,7 @@ void ILS::forceColor(Graph *G){
   Graph best (*G);
 
   for (int color = 0; color < auxG.sizeColor.size(); ++color){
+    auxG.CopyInfoGraph(*G);
     if(auxG.sizeColor[color] == -1) break;
     for (int node = 0; node < auxG.V; node++){
       vector<bool> available(auxG.V, true);
@@ -56,6 +78,7 @@ void ILS::recoloring(Graph *G){
   GRASP grasp(&auxG);
 
   for (int i = 0; i < auxG.sizeColor.size(); ++i){
+    auxG.CopyInfoGraph(*G);
     if(auxG.sizeColor[i] == 0) continue;
     if(auxG.sizeColor[i] == -1) break;
     for (int j = 0; j < auxG.V; ++j){
@@ -97,7 +120,6 @@ void ILS::changeColor(Graph *G){
 
       }
       if(auxG.numColors < best.numColors){
-        changeColor(&auxG);
         best.CopyGraph(auxG);
       }
     }

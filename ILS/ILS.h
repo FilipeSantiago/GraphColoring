@@ -20,6 +20,7 @@ public:
     void doILS(Graph *G, bool recoloring, bool forceColor, bool switchColors);
 
 private:
+    void shake1(Graph* G);
     void recoloring (Graph *G);
     void forceColor (Graph *G);
     void initialize (Graph *G);
